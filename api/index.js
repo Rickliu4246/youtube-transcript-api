@@ -34,10 +34,55 @@ export default async function handler(req, res) {
           {
             description: 'Get English transcript',
             url: '/api/transcript?video_id=dQw4w9WgXcQ&lang=en'
+          },
+          {
+            description: 'Auto-detect language',
+            url: '/api/transcript?video_id=dQw4w9WgXcQ'
           }
-        ]
+        ],
+        response: {
+          success: true,
+          data: {
+            transcript: [
+              {
+                text: 'Never gonna give you up',
+                offset: 0,
+                duration: 2500
+              }
+            ],
+            metadata: {
+              video_id: 'dQw4w9WgXcQ',
+              language: 'en',
+              count: 47,
+              totalDuration: 213000
+            }
+          }
+        }
       }
     },
+    usage: {
+      curl: 'curl "https://your-api.vercel.app/api/transcript?video_id=dQw4w9WgXcQ"',
+      javascript: `
+fetch('https://your-api.vercel.app/api/transcript?video_id=dQw4w9WgXcQ&lang=zh-TW')
+  .then(res => res.json())
+  .then(data => console.log(data));
+      `.trim(),
+      n8n: {
+        node: 'HTTP Request',
+        method: 'GET',
+        url: 'https://your-api.vercel.app/api/transcript',
+        parameters: {
+          video_id: '{{ $json.youtubeVideoId }}',
+          lang: 'zh-TW'
+        }
+      }
+    },
+    support: {
+      languages: ['zh-TW', 'zh-CN', 'en', 'ja', 'ko', 'es', 'fr', 'de', 'it', 'pt', 'ru', 'ar', 'hi', 'th', 'vi'],
+      fallback: 'Automatically tries multiple languages if requested language is not available'
+    },
+    author: 'Rick',
+    repository: 'https://github.com/yourusername/youtube-transcript-api',
     timestamp: new Date().toISOString()
   };
   
